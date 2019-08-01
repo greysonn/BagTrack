@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap');
+
+$background: #6e51ff;
+
+.navbar {
+  background: $background;
+  height: 100%;
+  width: 220px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  overflow-x: hidden;
+  align-items: center;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+
+  .title {
+    padding-top: 50px;
+    display: block;
+    color: #fff;
+    font-family: 'Poppins';
+    font-size: 32px;
+    font-weight: 400;
+  }
+  .subtitle {
+    display: block;
+    color: #fff;
+    font-family: 'Poppins';
+    font-size: 12px;
+    font-weight: 300;
+  }
+
+  .links {
+    margin: 15vh auto 0 auto;
+    width: 85%;
+    height: 100%;
+    .link-container {
+      text-decoration: none;
+      .link {
+        width: 100%;
+        height: auto;
+        margin: 15px 0;
+        padding: 14px 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-family: 'Open Sans';
+        font-size: 14px;
+        font-weight: 400;
+        letter-spacing: 0.1rem;
+        .icon {
+          width: 14px;
+          height: 14px;
+          margin-right: 8px;
+        }
+      }
+      .active {
+        .icon {
+          path {
+            fill: #6e51ff !important;
+          }
+        }
+        color: #6e51ff;
+        background-color: #fff;
+        border-radius: 8px;
+      }
+    }
+  }
+}

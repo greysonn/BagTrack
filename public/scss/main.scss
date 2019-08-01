@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap');
+
+$background: #FCFBFE;
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-y: hidden;
+  font-family: 'Open Sans';
+  background: $background;
+  // background-image: linear-gradient(to top, #2d2e2e, #1b1c1d);
+  -webkit-app-region: no-drag;
+  .drag-region {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 40px;
+    background: transparent;
+    width: 100%;
+    -webkit-app-region: drag;
+  }
+}
+p {
+  -webkit-margin-before: 0;
+  -webkit-margin-after: 0;
+  -webkit-margin-start: 0px;
+  -webkit-margin-end: 0px;
+}

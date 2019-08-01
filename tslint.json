@@ -1,0 +1,48 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended",
+    "tslint-microsoft-contrib"
+  ],
+  "jsRules": {},
+  "rules": {
+    "align": [true, "statements", "members", "elements"],
+    "export-name": [
+      true,
+      {
+        "ignore-case": true
+      }
+    ],
+    "max-line-length": [true, 80],
+    "no-any": false,
+    "no-unsafe-any": false,
+    "import-name": false,
+    "react-a11y-img-has-alt": false,
+    "max-func-body-length": false,
+    "no-relative-imports": false,
+    "no-submodule-imports": false,
+    "no-implicit-dependencies": [
+      true,
+      "dev",
+      [
+        "@",
+        "@public",
+        "@main",
+        "@models",
+        "@renderer",
+        "@utils"
+      ]
+    ],
+    "max-line-length": false,
+    "no-import-side-effect": [
+      true,
+      {
+        "ignore-module": "(\\.scss)$"
+      }
+    ],
+    "no-increment-decrement": ["allow-for-loops"],
+    "rulesDirectory": [
+      "node_modules/tslint-microsoft-contrib"
+    ]
+  }
+}
