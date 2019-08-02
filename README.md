@@ -6,8 +6,8 @@ BagTrack allows you to add all of your sales and immediately see your profit/los
 [Greyson](https://github.com/greysonn)
 
 ## Screenshots
-![1](https://imgur.com/a/JmmxgHe.png)
-![2](https://imgur.com/a/hPFzZNk.png)
+![1](https://i.imgur.com/bKOCEw6.png)
+![2](https://i.imgur.com/CGIHstW.png)
 
 ### Installation
 
