@@ -9,6 +9,7 @@ import * as url from 'url';
 import { data } from '@/classes/data';
 import { SaleInfo } from '@/common/types';
 
+const devtools: boolean = false;
 let mainWindow: Electron.BrowserWindow | null;
 data.loadMemory();
 
@@ -35,9 +36,11 @@ function createWindow(): void {
     mainWindow.webContents.openDevTools();
 
     // Load the react devtools
-    BrowserWindow.addDevToolsExtension(
-      path.join(os.homedir(), '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.6.0_0')
-    );
+    if (devtools === true) {
+      BrowserWindow.addDevToolsExtension(
+        path.join(os.homedir(), '/Library/Application Support/Google/Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/3.6.0_0')
+      );
+    }
   }
 
   mainWindow.webContents.on('did-finish-load', (): void => {
