@@ -2,7 +2,24 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap');
 
 .add-sale {
-
+  .row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 10px;
+    .col {
+      -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      max-width: 100%;
+      margin-right: 15px;
+      margin-left: 15px;
+    }
+  }
 }
 
 .configure-modal {
@@ -70,24 +87,5 @@
       at top left,
       #8c79eb, #6e51ff
     );
-  }
-
-  .row {
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    margin-right: -15px;
-    margin-left: -15px;
-    margin-top: 10px;
-    .col {
-      -ms-flex-preferred-size: 0;
-      flex-basis: 0;
-      -ms-flex-positive: 1;
-      flex-grow: 1;
-      max-width: 100%;
-      margin-right: 15px;
-      margin-left: 15px;
-    }
   }
 }

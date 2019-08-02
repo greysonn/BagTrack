@@ -39,3 +39,4 @@ npm start
 - [ ] Compile production built executables for mac/windows
 - [ ] Add support for currencies other than USD.
 - [ ] Ability to link to stockx/goat to auto-import sales
+- [ ] Virtualize the sales table to reduce size on lots of sales.

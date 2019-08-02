@@ -18,11 +18,62 @@
     text-align: left;
     margin-right: auto;
   }
+  .row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 10px -15px 0 -15px;
+    .col {
+      -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      max-width: 100%;
+      margin: 0 15px;
+    }
+  }
 
   .settings-box {
     margin-top: 40px;
     background-color: #fff;
     border-radius: 8px;
     border: 1px solid rgba(238,238,238,0.8);
+    padding: 14px;
+    .subheader {
+      font-size: 20px;
+      font-family: 'Open Sans';
+      color: #000;
+    }
+    .input {
+      margin-top: 4px;
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      padding: 8px;
+      outline: none;
+      border: 1px solid rgba(0,0,0,0.2);
+      font-size: 14px;
+      font-family: 'Open Sans';
+      font-weight: 300;
+    }
+    .input:hover, .input:focus, .select__control:hover, .select__control:focus {
+      border: 1px solid #6e51ff !important;
+      transition: 200ms ease;
+    }
+    
+    .save-btn {
+      cursor: pointer;
+      border-radius: 4px;
+      color: #fff;
+      padding: 12px 36px;
+      background: #6e51ff;
+      background-image: radial-gradient(
+        at top left,
+        #8c79eb, #6e51ff
+      );
+      outline: none;
+      box-shadow: 0px 15px 85px -7px rgba(110,81,255,0.6);
+    }
   }
 }
