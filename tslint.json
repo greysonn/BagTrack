@@ -13,6 +13,7 @@
         "ignore-case": true
       }
     ],
+    "no-non-null-assertion": false,
     "no-any": false,
     "no-unsafe-any": false,
     "import-name": false,

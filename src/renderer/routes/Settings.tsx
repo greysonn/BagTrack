@@ -67,7 +67,7 @@ export class Settings extends React.Component<SettingProps, SettingState> {
     );
   }
 
-  private showToast() {
+  private showToast(): void {
     toast.error('Stockx/Goat connections may be coming soon.');
   }
 }

@@ -4,8 +4,8 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 
-import SettingsIcon from '@public/img/settings.svg';
 import HomeIcon from '@public/img/home.svg';
+import SettingsIcon from '@public/img/settings.svg';
 import '@public/scss/navbar.scss';
 
 type NavbarProps = {};

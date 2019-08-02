@@ -174,7 +174,7 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
 
   private addProduct(event: any): void {
     // tslint:disable: no-for-in
-    const state: AddSaleState = this.state;
+    const state: any = this.state;
     for (const value in state) {
       if (state[value] === '') {
         toast.error('Form is incomplete');
