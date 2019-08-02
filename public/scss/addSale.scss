@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:400&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600&display=swap');
+
+.add-sale {
+
+}
+
+.configure-modal {
+  background-color: #fff;
+  color: #212529 !important;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  padding: 30px;
+  width: 50%;
+  .title-container {
+    display: flex;
+    flex-direction: row;
+    .title {
+      display: block;
+      color: #000;
+      font-family: 'Poppins';
+      font-size: 24px;
+      font-weight: 400;
+      text-align: left;
+      margin-right: auto;
+    }
+    .title-cancel {
+      cursor: pointer;
+    }
+  }
+  .label {
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-family: 'Open Sans';
+    font-weight: 300;
+  }
+  .input {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    padding: 8px;
+    outline: none;
+    border: 1px solid rgba(0,0,0,0.2);
+    font-size: 14px;
+    font-family: 'Open Sans';
+    font-weight: 300;
+  }
+  .input:hover, .input:focus, .select__control:hover, .select__control:focus {
+    border: 1px solid #6e51ff !important;
+    transition: 200ms ease;
+  }
+  .select-container div {
+    font-size: 14px;
+    font-family: 'Open Sans';
+    font-weight: 300;
+  }
+
+  .add-button {
+    cursor: pointer;
+    display: block;
+    margin-top: 20px;
+    margin-left: auto;
+    background: #6e51ff;
+    padding: 12px 36px;
+    color: #fff;
+    border-radius: 8px;
+    outline: none;
+    background-image: radial-gradient(
+      at top left,
+      #8c79eb, #6e51ff
+    );
+  }
+
+  .row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 10px;
+    .col {
+      -ms-flex-preferred-size: 0;
+      flex-basis: 0;
+      -ms-flex-positive: 1;
+      flex-grow: 1;
+      max-width: 100%;
+      margin-right: 15px;
+      margin-left: 15px;
+    }
+  }
+}

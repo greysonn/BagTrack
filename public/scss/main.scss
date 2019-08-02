@@ -19,6 +19,11 @@ html, body {
     width: 100%;
     -webkit-app-region: drag;
   }
+
+  ::selection {
+    background-color: #6e51ff;
+    color: #fff;
+  }
 }
 p {
   -webkit-margin-before: 0;

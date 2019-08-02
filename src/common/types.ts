@@ -10,4 +10,12 @@ export type SaleInfo = {
   purchasePrice: number;
   sellPrice: number;
   netProfit: number;
+  grossProfit: number;
+};
+
+export type DataManager = {
+  loadMemory(): void;
+  updateMemory(): void;
+  createSale(sale: SaleInfo): Promise<void>;
+  getSales(): SaleInfo[];
 };

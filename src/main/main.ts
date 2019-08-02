@@ -1,12 +1,16 @@
 /**
  * Entry point of the Election app.
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, Event } from 'electron';
 import * as os from 'os';
 import * as path from 'path';
 import * as url from 'url';
 
+import { data } from '@/classes/data';
+import { SaleInfo } from '@/common/types';
+
 let mainWindow: Electron.BrowserWindow | null;
+data.loadMemory();
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
@@ -36,10 +40,19 @@ function createWindow(): void {
     );
   }
 
+  mainWindow.webContents.on('did-finish-load', (): void => {
+    mainWindow.webContents.send('getSales', data.getSales());
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
+
+ipcMain.on('createSale', async (event: Event, arg: { sale: SaleInfo }) => {
+  await data.createSale(arg.sale);
+  mainWindow.webContents.send('getSales', data.getSales());
+});
 
 app.on('ready', createWindow);
 
