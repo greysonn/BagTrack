@@ -8,12 +8,25 @@ import '@public/scss/home.scss';
 import { AddSale } from '../components/addSale';
 import { TableItem } from '../components/tableItem';
 
+type AnalyticStore = {
+  grossProfit: number;
+  netProfit: number;
+  topCategory: string;
+  mostProfitableProduct: string;
+}
 type HomeProps = {};
 type HomeState = {
   sales: SaleInfo[];
   addModalOpen: boolean;
 };
+
 let storedSales: SaleInfo[] = [];
+let storedAnalytics: AnalyticStore = {
+  grossProfit: 0,
+  netProfit: 0,
+  topCategory: 'None',
+  mostProfitableProduct: 'None'
+};
 
 /**
  * Home component to be used as main homepage
@@ -38,7 +51,6 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.openAddModal = this.openAddModal.bind(this);
     this.closeAddModal = this.closeAddModal.bind(this);
 
-
     ipcRenderer.on('getSales', (event: IpcMessageEvent, sales: SaleInfo[]): void => {
       /* Reset analytics to prepare for new data */
       this.grossProfit = 0;
@@ -57,7 +69,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
         frequency[categoryStore[v]] = (frequency[categoryStore[v]] || 0) + 1;
         if (frequency[categoryStore[v]] > max) {
           max = frequency[categoryStore[v]];
-          this.topCategory = categoryStore[v];
+          storedAnalytics.topCategory = categoryStore[v];
         }
       }
 
@@ -70,12 +82,20 @@ export class Home extends React.Component<HomeProps, HomeState> {
           mostProfitable = sale.netProfit;
         }
       }
+      storedAnalytics.grossProfit = this.grossProfit;
+      storedAnalytics.netProfit = this.netProfit;
+      storedAnalytics.topCategory = this.topCategory;
+      storedAnalytics.mostProfitableProduct = this.mostProfitableProduct;
       storedSales = sales;
       this.setState({ sales });
     });
   }
 
   public componentDidMount(): void {
+    this.grossProfit = storedAnalytics.grossProfit;
+    this.netProfit = storedAnalytics.netProfit;
+    this.topCategory = storedAnalytics.topCategory;
+    this.mostProfitableProduct = storedAnalytics.mostProfitableProduct;
     this.setState({ sales: storedSales });
   }
 
