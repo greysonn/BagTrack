@@ -28,5 +28,6 @@ dist
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
 
+out
 typings
 build
