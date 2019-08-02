@@ -17,5 +17,6 @@ export type DataManager = {
   loadMemory(): void;
   updateMemory(): void;
   createSale(sale: SaleInfo): Promise<void>;
+  deleteSale(index: number): Promise<void>;
   getSales(): SaleInfo[];
 };

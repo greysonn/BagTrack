@@ -1,11 +1,12 @@
 import * as React from 'react';
 import Select from 'react-select';
 import { SaleInfo } from '@/common/types';
+import { ipcRenderer } from 'electron';
 
+type Action = { label: string; value: string };
 type TableItemProps = {
   sale: SaleInfo;
 };
-
 type TableItemState = {
   selectedAction: {
     value: string;
@@ -17,7 +18,7 @@ type TableItemState = {
  * TableItem Component
  */
 export class TableItem extends React.Component<TableItemProps, TableItemState> {
-  private handleSelectChange: (selectedOption: any) => void;
+  private handleSelectChange: (selectedOption: Action) => void;
   constructor(props: TableItemProps) {
     super(props);
     this.state = {
@@ -25,15 +26,17 @@ export class TableItem extends React.Component<TableItemProps, TableItemState> {
         value: 'title', label: 'Actions'
       }
     };
-    this.handleSelectChange = (selectedAction: any): void => {
-      this.setState({ selectedAction });
+    this.handleSelectChange = (selectedAction: Action): void => {
+      if (selectedAction.value === 'delete') {
+        ipcRenderer.send('deleteSale', this.props.sale);
+      }
     };
   }
 
   public render(): React.ReactNode {
     const { sale } = this.props;
 
-    if (sale && sale.purchasePrice) {
+    if (sale && sale.purchasePrice !== undefined) {
       return (
         <tr className='row'>
           <td>
@@ -79,6 +82,9 @@ export class TableItem extends React.Component<TableItemProps, TableItemState> {
                 options={[
                   {
                     value: 'title', label: 'Actions'
+                  },
+                  {
+                    value: 'delete', label: 'Delete'
                   }
                 ]}
               />
@@ -87,7 +93,9 @@ export class TableItem extends React.Component<TableItemProps, TableItemState> {
         </tr>
       );
     } else {
-      return (<div></div>);
+      return (
+        <tr><td><span>Error</span></td></tr>
+      );
     }
   }
 }

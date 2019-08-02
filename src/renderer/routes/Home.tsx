@@ -40,6 +40,12 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
   public componentDidMount(): void {
     ipcRenderer.on('getSales', (event: IpcMessageEvent, sales: SaleInfo[]): void => {
+      /* Reset analytics to prepare for new data */
+      this.grossProfit = 0;
+      this.netProfit = 0;
+      this.topCategory = 'None';
+      this.mostProfitableProduct = 'None';
+
       // tslint:disable: no-for-in-array
       // tslint:disable: no-for-in
       // tslint:disable: forin

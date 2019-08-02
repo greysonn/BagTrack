@@ -13,13 +13,13 @@
         "ignore-case": true
       }
     ],
-    "max-line-length": [true, 80],
     "no-any": false,
     "no-unsafe-any": false,
     "import-name": false,
     "react-a11y-img-has-alt": false,
     "max-func-body-length": false,
     "strict-boolean-expressions": false,
+    "no-single-line-block-comment": false,
     "no-relative-imports": false,
     "no-submodule-imports": false,
     "no-implicit-dependencies": [

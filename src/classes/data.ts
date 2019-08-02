@@ -43,6 +43,19 @@ export const data: DataManager = {
     fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
   },
 
+  /**
+   * deleteSale
+   * removes a sale from the sales.json path
+   */
+  deleteSale: async (index: number): Promise<void> => {
+    saleStorage.splice(index, 1);
+    fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
+  },
+
+  /**
+   * getSales
+   * returns all sales from memory.
+   */
   getSales: (): SaleInfo[] => {
     return saleStorage;
   }
