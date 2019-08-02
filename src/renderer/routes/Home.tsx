@@ -13,6 +13,7 @@ type HomeState = {
   sales: SaleInfo[];
   addModalOpen: boolean;
 };
+let storedSales: SaleInfo[] = [];
 
 /**
  * Home component to be used as main homepage
@@ -36,9 +37,8 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
     this.openAddModal = this.openAddModal.bind(this);
     this.closeAddModal = this.closeAddModal.bind(this);
-  }
 
-  public componentDidMount(): void {
+
     ipcRenderer.on('getSales', (event: IpcMessageEvent, sales: SaleInfo[]): void => {
       /* Reset analytics to prepare for new data */
       this.grossProfit = 0;
@@ -70,8 +70,13 @@ export class Home extends React.Component<HomeProps, HomeState> {
           mostProfitable = sale.netProfit;
         }
       }
+      storedSales = sales;
       this.setState({ sales });
     });
+  }
+
+  public componentDidMount(): void {
+    this.setState({ sales: storedSales });
   }
 
   public render(): React.ReactNode {
