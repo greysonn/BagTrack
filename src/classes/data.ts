@@ -2,11 +2,13 @@ import * as electron from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { DataManager, SaleInfo } from '@/common/types';
+import { DataManager, SaleInfo, Settings } from '@/common/types';
 
 let dataPath: string;
 let salesPath: string;
+let settingsPath: string;
 let saleStorage: SaleInfo[];
+let settingStorage: Settings;
 
 /**
  * Data class to handle all user-stored data.
@@ -15,10 +17,19 @@ export const data: DataManager = {
   loadMemory: (): void => {
     dataPath = (electron.app || electron.remote.app).getPath('userData');
     salesPath = path.join(dataPath, 'sales.json');
+    settingsPath = path.join(dataPath, 'settings.json');
     if (!fs.existsSync(salesPath)) {
       fs.writeFileSync(salesPath, '[]');
     }
+    if (!fs.existsSync(settingsPath)) {
+      fs.writeFileSync(settingsPath, JSON.stringify({
+        goatUsername: '',
+        goatPassword: '',
+        goatAuthToken: ''
+      }));
+    }
     saleStorage = JSON.parse(fs.readFileSync(salesPath).toString());
+    settingStorage = JSON.parse(fs.readFileSync(settingsPath).toString());
   },
 
   /**
@@ -28,6 +39,7 @@ export const data: DataManager = {
    */
   updateMemory: (): void => {
     saleStorage = JSON.parse(fs.readFileSync(salesPath).toString());
+    settingStorage = JSON.parse(fs.readFileSync(settingsPath).toString());
   },
 
   /**
@@ -58,5 +70,18 @@ export const data: DataManager = {
    */
   getSales: (): SaleInfo[] => {
     return saleStorage;
+  },
+
+  setSetting: (key: keyof Settings, value: string): void => {
+    settingStorage[key] = value;
+    fs.writeFileSync(settingsPath, JSON.stringify(settingStorage));
+  },
+
+  /**
+   * getSettings
+   * returns the settings from memory.
+   */
+  getSettings: (): Settings => {
+    return settingStorage;
   }
 };

@@ -62,12 +62,63 @@
       transition: 200ms ease;
     }
     
-    .save-btn {
+    .goat-btn {
+      height: 51px;
+      width: 206px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #000000;
+      font-size: 14px;
+      padding: 12px 36px;
+      background: #fff;
+      outline: none;
+      box-shadow: 0px 15px 85px -7px rgba(0,0,0,0.2);
+      .img {
+        margin-left: .4rem;
+        width: 60px;
+        height: auto;
+        max-width: 100%;
+      }
+    }
+    
+    .stockx-btn {
+      height: 51px;
+      width: 206px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       cursor: pointer;
       border-radius: 4px;
       color: #fff;
+      font-size: 14px;
       padding: 12px 36px;
-      background: #6e51ff;
+      background: #3bae2b;
+      outline: none;
+      background-image: radial-gradient(
+        at top left,
+        #51bf43, #3bae2b
+      );
+      box-shadow: 0px 15px 85px -7px rgba(135,225,190,0.6);
+      .img {
+        margin-left: .6rem;
+        width: 70px;
+        height: auto;
+        max-width: 100%;
+      }
+    }
+
+    .save-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 14px;
+      padding: 12px 36px;
       background-image: radial-gradient(
         at top left,
         #8c79eb, #6e51ff
