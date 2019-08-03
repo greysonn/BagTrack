@@ -7,7 +7,7 @@ import * as path from 'path';
 import * as url from 'url';
 
 import { data } from '@/classes/data';
-import { SaleInfo } from '@/common/types';
+import { SaleInfo, Settings } from '@/common/types';
 import { Goat } from '../classes/goat';
 
 const goat: Goat = new Goat();
@@ -46,15 +46,9 @@ function createWindow(): void {
     }
   }
 
-  if (data.getSettings().goatUsername) {
-    goat.logIn(data.getSettings().goatUsername, data.getSettings().goatPassword).catch((e: Error) => {
-      if (e && mainWindow) {
-        mainWindow.webContents.send('goatLoginResponse', false);
-      }
-    });
-  }
-
   mainWindow.webContents.on('did-finish-load', (): void => {
+    const settings: Settings = data.getSettings();
+    mainWindow!.webContents.send('loadSettings', settings);
     mainWindow!.webContents.send('getSales', data.getSales());
   });
 
@@ -62,6 +56,11 @@ function createWindow(): void {
     mainWindow = null;
   });
 }
+
+ipcMain.on('requestSettings', async () => {
+  const settings: Settings = data.getSettings();
+  mainWindow!.webContents.send('loadSettings', settings);
+});
 
 ipcMain.on('goatLogin', async (event: IpcMessageEvent, arg: { username: string; password: string }) => {
   // tslint:disable: possible-timing-attack

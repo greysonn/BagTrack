@@ -1,10 +1,10 @@
-import { toast } from 'react-toastify'
 import * as React from 'react';
+import { toast } from 'react-toastify'
 
 import * as GoatLogo from '@public/img/goat.png';
 import * as StockxLogo from '@public/img/stockx.png';
 import '@public/scss/settings.scss';
-import { ipcRenderer, IpcMessageEvent } from 'electron';
+import { IpcMessageEvent, ipcRenderer } from 'electron';
 
 type SettingProps = {};
 type SettingState = {
@@ -13,6 +13,14 @@ type SettingState = {
   goatUsername: string;
   goatPassword: string;
 };
+
+ipcRenderer.on('goatLoginResponse', (event: IpcMessageEvent, success: boolean) => {
+  if (success) {
+    toast.success('Successfully logged into goat and saved credentials.');
+  } else {
+    toast.error('There was an issue logging into goat, please try again later');
+  }
+});
 
 /**
  * Home component to be used as main homepage
@@ -30,14 +38,18 @@ export class Settings extends React.Component<SettingProps, SettingState> {
     this.handleChange = this.handleChange.bind(this);
     this.showToast = this.showToast.bind(this);
     this.goatLogin = this.goatLogin.bind(this);
+  }
 
-    ipcRenderer.on('goatLoginResponse', (event: IpcMessageEvent, success: boolean) => {
-      if (success) {
-        toast.success('Successfully logged into goat and saved credentials.');
-      } else {
-        toast.error('There was an issue logging into goat, please try again later');
-      }
+  public componentDidMount(): void {
+    ipcRenderer.send('requestSettings');
+
+    ipcRenderer.on('loadSettings', (event: IpcMessageEvent, settings: SettingState) => {
+      this.setState(settings);
     });
+  }
+
+  public componentWillUnmount(): void {
+    ipcRenderer.removeAllListeners('loadSettings')
   }
 
   public render(): React.ReactNode {
