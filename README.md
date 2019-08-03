@@ -34,9 +34,9 @@ npm start
 
 
 ## Todo List
-- [ ] Finish settings page.
+- [X] Finish settings page.
 - [X] Add actions to each sale
-- [ ] Compile production built executables for mac/windows
+- [X] Compile production built executables for mac/windows
 - [ ] Add support for currencies other than USD.
 - [ ] Ability to link to stockx/goat to auto-import sales
 - [ ] Virtualize the sales table to reduce size on lots of sales.
