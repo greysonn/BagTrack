@@ -1,5 +1,5 @@
 /**
- * Entry point of the Election app.
+ * Entry point of the Electron app.
  */
 import { app, BrowserWindow, Event, ipcMain } from 'electron';
 import * as os from 'os';
