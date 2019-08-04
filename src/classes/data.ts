@@ -25,7 +25,10 @@ export const data: DataManager = {
       fs.writeFileSync(settingsPath, JSON.stringify({
         goatUsername: '',
         goatPassword: '',
-        goatAuthToken: ''
+        goatAuthToken: '',
+        stockxEmail: '',
+        stockxPassword: '',
+        stockxJwtToken: ''
       }));
     }
     saleStorage = JSON.parse(fs.readFileSync(salesPath).toString());

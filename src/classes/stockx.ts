@@ -30,12 +30,14 @@ export class Stockx {
           password
         },
         json: true,
-        jar: this.jar
+        jar: this.jar,
+        resolveWithFullResponse: true
       });
-      this.jwtToken = res.headers['Jwt-Authorization'];
+      this.jwtToken = res.headers['jwt-authorization'];
 
-      return '';
+      return this.jwtToken;
     } catch (e) {
+      console.error(e);
       return '';
     }
   }

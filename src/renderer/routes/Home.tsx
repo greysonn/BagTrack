@@ -4,6 +4,7 @@ import Modal from 'react-responsive-modal';
 
 import { SaleInfo, Settings } from '@/common/types';
 import * as GoatLogo from '@public/img/goat.png';
+import * as StockxLogo from '@public/img/stockx.png';
 import '@public/scss/home.scss';
 import { AddSale } from '../components/addSale';
 import { TableItem } from '../components/tableItem';
@@ -19,6 +20,7 @@ type HomeState = {
   sales: SaleInfo[];
   addModalOpen: boolean;
   goatConnected: boolean;
+  stockxConnected: boolean;
 };
 
 let storedSales: SaleInfo[] = [];
@@ -42,7 +44,8 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.state = {
       sales: [],
       addModalOpen: false,
-      goatConnected: false
+      goatConnected: false,
+      stockxConnected: false
     };
 
     this.grossProfit = 0;
@@ -77,7 +80,6 @@ export class Home extends React.Component<HomeProps, HomeState> {
         }
       }
 
-
       let mostProfitable: number = 0;
       for (const sale of sales) {
         this.netProfit += sale.netProfit;
@@ -106,6 +108,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
     ipcRenderer.on('loadSettings', (event: IpcMessageEvent, settings: Settings) => {
       if (settings.goatAuthToken) {
         this.setState({ goatConnected: true });
+      }
+      if (settings.stockxJwtToken) {
+        this.setState({ stockxConnected: true });
       }
     });
   }
@@ -210,6 +215,11 @@ export class Home extends React.Component<HomeProps, HomeState> {
                 {this.state.sales.length} {this.state.sales.length === 1 ? 'Sale' : 'Sales'}
               </div>
               <div className='sync-container'>
+                {this.state.goatConnected ? (
+                  <button onClick={this.syncGoat} className='stockx-btn'>
+                    Pull Sales <img className='img' src={StockxLogo.toString()}/>
+                  </button>
+                ) : null }
                 {this.state.goatConnected ? (
                   <button onClick={this.syncGoat} className='goat-btn'>
                     Pull Sales <img className='img' src={GoatLogo.toString()}/>

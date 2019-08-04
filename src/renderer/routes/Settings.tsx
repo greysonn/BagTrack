@@ -8,7 +8,7 @@ import { IpcMessageEvent, ipcRenderer } from 'electron';
 
 type SettingProps = {};
 type SettingState = {
-  stockxUsername: string;
+  stockxEmail: string;
   stockxPassword: string;
   goatUsername: string;
   goatPassword: string;
@@ -22,6 +22,14 @@ ipcRenderer.on('goatLoginResponse', (event: IpcMessageEvent, success: boolean) =
   }
 });
 
+ipcRenderer.on('stockxLoginResponse', (event: IpcMessageEvent, success: boolean) => {
+  if (success) {
+    toast.success('Successfully logged into stockx and saved credentials.');
+  } else {
+    toast.error('There was an issue logging into stockx, please try again later');
+  }
+});
+
 /**
  * Home component to be used as main homepage
  */
@@ -29,14 +37,14 @@ export class Settings extends React.Component<SettingProps, SettingState> {
   constructor(props: SettingProps) {
     super(props);
     this.state = {
-      stockxUsername: '',
+      stockxEmail: '',
       stockxPassword: '',
       goatUsername: '',
       goatPassword: ''
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.showToast = this.showToast.bind(this);
+    this.stockxLogin = this.stockxLogin.bind(this);
     this.goatLogin = this.goatLogin.bind(this);
   }
 
@@ -70,8 +78,8 @@ export class Settings extends React.Component<SettingProps, SettingState> {
                 <div className='row'>
                   <div className='col'>
                     <p>Stockx Account</p>
-                    <input value={this.state.stockxUsername} className='input' placeholder='Username'
-                      onChange={this.handleChange} name='stockxUsername' />
+                    <input value={this.state.stockxEmail} className='input' placeholder='Email'
+                      onChange={this.handleChange} name='stockxEmail' />
                   </div>
                 </div>
                 <div className='row'>
@@ -82,7 +90,7 @@ export class Settings extends React.Component<SettingProps, SettingState> {
                 </div>
                 <div className='row' style={{ marginTop: '22px', marginBottom: '22px' }}>
                   <div className='col'>
-                    <button onClick={this.showToast} className='stockx-btn'>Login to <img className='img' src={StockxLogo.toString()}/></button>
+                    <button onClick={this.stockxLogin} className='stockx-btn'>Login to <img className='img' src={StockxLogo.toString()}/></button>
                   </div>
                 </div>
               </div>
@@ -126,7 +134,10 @@ export class Settings extends React.Component<SettingProps, SettingState> {
     });
   }
 
-  private showToast(): void {
-    toast.error('Stockx connections may be coming soon.');
+  private stockxLogin(): void {
+    ipcRenderer.send('stockxLogin', {
+      email: this.state.stockxEmail,
+      password: this.state.stockxPassword
+    });
   }
 }

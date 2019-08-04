@@ -19,6 +19,9 @@ export type Settings = {
   goatUsername: string;
   goatPassword: string;
   goatAuthToken: string;
+  stockxEmail: string;
+  stockxPassword: string;
+  stockxJwtToken: string;
 };
 
 export type DataManager = {
