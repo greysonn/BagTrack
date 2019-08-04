@@ -5,7 +5,6 @@ import * as request from 'request-promise';
 import { Order } from '@/common/goat';
 import { SaleInfo } from '@/common/types';
 import { data } from './data';
-import { ipcMain } from 'electron';
 
 /**
  * Goat account manager
