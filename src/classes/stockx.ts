@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { CookieJar } from 'request';
 import * as request from 'request-promise';
 
+import { StockxSale, StockxUser, SalesResponse } from '@/common/stockx';
 import { SaleInfo } from '@/common/types';
 import { data } from './data';
 
@@ -20,9 +21,9 @@ export class Stockx {
     try {
       const res: request.RequestPromise = await request({
         method: 'POST',
-        url: 'https://gateway.stockx.com/api/v1/login',
+        url: 'https://stockx.com/api/login',
         headers: {
-          'x-api-key': '99WtRZK6pS1Fqt8hXBfWq8BYQjErmwipa3a0hYxX',
+          'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
           'content-type': 'application/json'
         },
         body: {
@@ -34,16 +35,68 @@ export class Stockx {
         resolveWithFullResponse: true
       });
       this.jwtToken = res.headers['jwt-authorization'];
+      const body: StockxUser = JSON.parse(JSON.stringify(res.body));
+      data.setSetting('stockxUserId', body.Customer.id);
 
       return this.jwtToken;
     } catch (e) {
-      console.error(e);
       return '';
     }
   }
 
   public async getSales(): Promise<void> {
-    return;
+    data.clearStockxSales();
+    let page: number = 1;
+    let paging: boolean = true;
+    while (paging) {
+      try {
+        const res: SalesResponse = await request({
+          method: 'GET',
+          url: `https://stockx.com/api/customers/${data.getSettings().stockxUserId}/selling/history`,
+          qs: {
+            sort: 'matched_with_date',
+            order: 'DESC',
+            limit: '100',
+            page: page.toString(),
+            currency: 'USD'
+          },
+          json: true,
+          headers: {
+            'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36',
+            'jwt-authorization': this.jwtToken
+          },
+          jar: this.jar
+        });
+        const sales: SaleInfo[] = [];
+
+        if (!res.Pagination.total) {
+          paging = false;
+
+          return;
+        }
+
+        for (const order of res.PortfolioItems) {
+          if (order.text === 'Sale Complete') {
+            sales.push({
+              product: order.product.title,
+              category: this.getCategory(order.product.title),
+              size: order.product.shoeSize || 'One Size',
+              purchaseDate: moment(order.product.releaseDate).format('D MMM YYYY'),
+              purchasePrice: parseInt((order.product.retailPrice).toFixed(2)),
+              sellPrice: parseInt((order.amount).toFixed(2)),
+              netProfit: parseInt((order.localAmount - order.product.retailPrice).toFixed(2)),
+              grossProfit: parseInt((order.amount - order.product.retailPrice).toFixed(2)),
+              stockxSale: true
+            });
+          }
+        }
+        await data.createSale(sales);
+        page++;
+      } catch (e) {
+        console.error(e);
+        paging = false;
+      }
+    }
   }
 
   private getCategory(name: string): SaleInfo['category'] {

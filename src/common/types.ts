@@ -22,6 +22,7 @@ export type Settings = {
   stockxEmail: string;
   stockxPassword: string;
   stockxJwtToken: string;
+  stockxUserId: string;
 };
 
 export type DataManager = {
@@ -31,6 +32,7 @@ export type DataManager = {
   deleteSale(index: number): Promise<void>;
   getSales(): SaleInfo[];
   clearGoatSales(): void;
+  clearStockxSales(): void;
   setSetting(key: string, value: string): void;
   getSettings(): Settings;
 };

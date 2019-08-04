@@ -56,6 +56,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.openAddModal = this.openAddModal.bind(this);
     this.closeAddModal = this.closeAddModal.bind(this);
     this.syncGoat = this.syncGoat.bind(this);
+    this.syncStockx = this.syncStockx.bind(this);
 
     ipcRenderer.on('getSales', (event: IpcMessageEvent, sales: SaleInfo[]): void => {
       /* Reset analytics to prepare for new data */
@@ -215,8 +216,8 @@ export class Home extends React.Component<HomeProps, HomeState> {
                 {this.state.sales.length} {this.state.sales.length === 1 ? 'Sale' : 'Sales'}
               </div>
               <div className='sync-container'>
-                {this.state.goatConnected ? (
-                  <button onClick={this.syncGoat} className='stockx-btn'>
+                {this.state.stockxConnected ? (
+                  <button onClick={this.syncStockx} className='stockx-btn'>
                     Pull Sales <img className='img' src={StockxLogo.toString()}/>
                   </button>
                 ) : null }
@@ -303,5 +304,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
   private syncGoat(): void {
     ipcRenderer.send('syncGoatSales');
+  }
+
+  private syncStockx(): void {
+    ipcRenderer.send('syncStockxSales');
   }
 }

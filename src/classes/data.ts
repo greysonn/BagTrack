@@ -28,7 +28,8 @@ export const data: DataManager = {
         goatAuthToken: '',
         stockxEmail: '',
         stockxPassword: '',
-        stockxJwtToken: ''
+        stockxJwtToken: '',
+        stockxUserId: '',
       }));
     }
     saleStorage = JSON.parse(fs.readFileSync(salesPath).toString());
@@ -77,6 +78,11 @@ export const data: DataManager = {
 
   clearGoatSales: (): void => {
     saleStorage = saleStorage.filter((s: SaleInfo) => !s.goatSale);
+    fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
+  },
+
+  clearStockxSales: (): void => {
+    saleStorage = saleStorage.filter((s: SaleInfo) => !s.stockxSale);
     fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
   },
 
