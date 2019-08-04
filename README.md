@@ -38,6 +38,6 @@ npm start
 - [X] Add actions to each sale
 - [X] Compile production built executables for mac/windows
 - [X] Ability to link to goat to auto-import sales
-- [ ] Ability to link to stockx to auto-import sales
+- [X] Ability to link to stockx to auto-import sales
 - [ ] Add support for currencies other than USD.
 - [ ] Virtualize the sales table to reduce size on lots of sales.
