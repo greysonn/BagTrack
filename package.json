@@ -22,7 +22,7 @@
       "target": "nsis",
       "asar": false
     },
-    "buildVersion": "1.0.0"
+    "buildVersion": "0.2.0"
   },
   "author": "@obfuscation",
   "license": "MIT",
@@ -33,7 +33,6 @@
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-fittext": "^1.0.0",
     "react-responsive-modal": "^4.0.1",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",

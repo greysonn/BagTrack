@@ -1,6 +1,5 @@
 import { IpcMessageEvent, ipcRenderer  } from 'electron';
 import * as React from 'react';
-import ReactFitText from 'react-fittext';
 import Modal from 'react-responsive-modal';
 
 import { SaleInfo, Settings } from '@/common/types';
@@ -124,7 +123,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
         <tbody className='table-body'>
           { sales.map((sale: SaleInfo, index: number) => {
             return (
-              <TableItem sale={sale} key={index} />
+              <TableItem sale={sale} key={index} index={index} />
             );
           })}
         </tbody>
@@ -157,7 +156,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
             <div className='summary-card gross-profit-loss'>
               <div className='title'>
                 <p>
-                  Gross Profit
+                  Gross Income
                 </p>
               </div>
               <div className='content'>
@@ -169,7 +168,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
             <div className='summary-card net-profit-loss'>
               <div className='title'>
                 <p>
-                  Net Profit
+                  Net Income
                 </p>
               </div>
               <div className='content'>
@@ -252,7 +251,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
                   <td>
                     <div className='cell'>
                       <span>
-                        Net Profit
+                        Profit
                       </span>
                     </div>
                   </td>

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Select from 'react-select';
-import { SaleInfo } from '@/common/types';
 import { ipcRenderer } from 'electron';
 
 type Action = { label: string; value: string };
 type TableItemProps = {
+  index: number;
   sale: SaleInfo;
 };
 type TableItemState = {
@@ -28,7 +28,7 @@ export class TableItem extends React.Component<TableItemProps, TableItemState> {
     };
     this.handleSelectChange = (selectedAction: Action): void => {
       if (selectedAction.value === 'delete') {
-        ipcRenderer.send('deleteSale', this.props.sale);
+        ipcRenderer.send('deleteSale', this.props.index);
       }
     };
   }

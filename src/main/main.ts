@@ -41,7 +41,7 @@ function createWindow(): void {
     title: 'BagTrack',
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      webSecurity: false
+      webSecurity: true
     }
   });
 
@@ -103,9 +103,7 @@ ipcMain.on('createSale', async (event: IpcMessageEvent, arg: { sale: SaleInfo })
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
-ipcMain.on('deleteSale', async (event: IpcMessageEvent, sale: SaleInfo) => {
-  const sales: SaleInfo[] = data.getSales();
-  const index: number = sales.indexOf(sale);
+ipcMain.on('deleteSale', async (event: IpcMessageEvent, index: number) => {
   await data.deleteSale(index);
   mainWindow!.webContents.send('getSales', data.getSales());
 });
