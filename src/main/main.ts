@@ -1,17 +1,38 @@
 /**
  * Entry point of the Electron app.
  */
-import { app, BrowserWindow, Event, ipcMain } from 'electron';
+import { app, BrowserWindow, Event, ipcMain, IpcMessageEvent } from 'electron';
 import * as os from 'os';
 import * as path from 'path';
 import * as url from 'url';
 
 import { data } from '@/classes/data';
-import { SaleInfo } from '@/common/types';
+import { SaleInfo, Settings } from '@/common/types';
+import { Goat } from '../classes/goat';
 
+const goat: Goat = new Goat();
 const devtools: boolean = false;
 let mainWindow: Electron.BrowserWindow | null;
+
 data.loadMemory();
+
+const {
+  goatUsername,
+  goatPassword
+} = data.getSettings();
+if (goatUsername && goatPassword) {
+  // tslint:disable-next-line: no-floating-promises
+  (async (): Promise<void> => {
+    try {
+      const token: string = await goat.logIn(goatUsername, goatPassword);
+      data.setSetting('goatUsername', goatUsername);
+      data.setSetting('goatPassword', goatPassword);
+      data.setSetting('goatAuthToken', token);
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+}
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
@@ -44,6 +65,8 @@ function createWindow(): void {
   }
 
   mainWindow.webContents.on('did-finish-load', (): void => {
+    const settings: Settings = data.getSettings();
+    mainWindow!.webContents.send('loadSettings', settings);
     mainWindow!.webContents.send('getSales', data.getSales());
   });
 
@@ -52,12 +75,35 @@ function createWindow(): void {
   });
 }
 
-ipcMain.on('createSale', async (event: Event, arg: { sale: SaleInfo }) => {
+ipcMain.on('requestSettings', async () => {
+  const settings: Settings = data.getSettings();
+  mainWindow!.webContents.send('loadSettings', settings);
+});
+
+ipcMain.on('goatLogin', async (event: IpcMessageEvent, arg: { username: string; password: string }) => {
+  // tslint:disable: possible-timing-attack
+  const token: string = await goat.logIn(arg.username, arg.password);
+  if (token) {
+    data.setSetting('goatUsername', arg.username);
+    data.setSetting('goatPassword', arg.password);
+    data.setSetting('goatAuthToken', token);
+    mainWindow!.webContents.send('goatLoginResponse', true);
+  } else {
+    mainWindow!.webContents.send('goatLoginResponse', false);
+  }
+});
+
+ipcMain.on('syncGoatSales', async (event: IpcMessageEvent) => {
+  await goat.getSales();
+  mainWindow!.webContents.send('getSales', data.getSales());
+});
+
+ipcMain.on('createSale', async (event: IpcMessageEvent, arg: { sale: SaleInfo }) => {
   await data.createSale(arg.sale);
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
-ipcMain.on('deleteSale', async (event: Event, sale: SaleInfo) => {
+ipcMain.on('deleteSale', async (event: IpcMessageEvent, sale: SaleInfo) => {
   const sales: SaleInfo[] = data.getSales();
   const index: number = sales.indexOf(sale);
   await data.deleteSale(index);

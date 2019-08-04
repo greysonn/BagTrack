@@ -94,6 +94,9 @@ $tableBackground: #fff;
       box-shadow: 0px 15px 78px -7px rgba(213,169,255,0.6);
     }
     .top-product {
+      .content {
+        overflow-x: auto;
+      }
       background-image: radial-gradient(
         at top left,
         rgb(238, 223, 107), #FFE000
@@ -106,8 +109,8 @@ $tableBackground: #fff;
     margin-top: 60px;
     border-radius: 8px;
     width: 100%;
-    min-height: calc(100vh - 350px);
-    max-height: calc(100vh - 350px);
+    min-height: calc(100vh - 370px);
+    max-height: calc(100vh - 370px);
     overflow-y: scroll;
     border: 1px solid rgba(238,238,238,0.8);
     border-collapse: collapse;
@@ -130,6 +133,30 @@ $tableBackground: #fff;
         color: rgb(126, 126, 126);
         font-size: 14px;
       }
+      .sync-container {
+        margin: 0 0 0 auto;
+        .goat-btn {
+          height: 51px;
+          width: 220px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          border-radius: 4px;
+          color: #000000;
+          font-size: 14px;
+          padding: 12px 36px;
+          background: #fff;
+          outline: none;
+          box-shadow: 0px 15px 85px -7px rgba(0,0,0,0.2);
+          .img {
+            margin-left: .4rem;
+            width: 60px;
+            height: auto;
+            max-width: 100%;
+          }
+        }
+      }
     }
     .sales-table {
       position: relative;
@@ -147,6 +174,9 @@ $tableBackground: #fff;
               font-size: 12px;
               color: rgb(126, 126, 126);
               padding: 8px 8px 8px 30px;
+              p {
+                overflow-x: hidden
+              }
             }
           }
         }
@@ -159,7 +189,8 @@ $tableBackground: #fff;
             margin: 3px 0;
             font-size: 10px;
           }
-          .select {
+          .select-container {
+            min-width: 110px;
             padding: 8px;
             outline: none !important;
           }

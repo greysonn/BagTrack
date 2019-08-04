@@ -1,6 +1,6 @@
 {
   "name": "bagtrack",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Application built to help resellers track their profits and losses",
   "main": "./dist/main.bundle.js",
   "scripts": {
@@ -33,11 +33,14 @@
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-fittext": "^1.0.0",
     "react-responsive-modal": "^4.0.1",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "react-select": "^3.0.4",
-    "react-toastify": "^5.3.2"
+    "react-toastify": "^5.3.2",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4"
   },
   "devDependencies": {
     "@svgr/webpack": "^4.3.2",
@@ -45,6 +48,8 @@
     "@types/react": "^16.8.24",
     "@types/react-router-dom": "^4.3.4",
     "@types/react-select": "^3.0.0",
+    "@types/request": "^2.48.2",
+    "@types/request-promise": "^4.1.44",
     "acorn": "^6.2.1",
     "ajv": "^6.10.2",
     "copy-pkg-json-webpack-plugin": "0.0.38",
