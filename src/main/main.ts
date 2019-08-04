@@ -9,8 +9,10 @@ import * as url from 'url';
 import { data } from '@/classes/data';
 import { SaleInfo, Settings } from '@/common/types';
 import { Goat } from '../classes/goat';
+import { Stockx } from '../classes/stockx';
 
 const goat: Goat = new Goat();
+const stockx: Stockx = new Stockx();
 const devtools: boolean = false;
 let mainWindow: Electron.BrowserWindow | null;
 
@@ -90,6 +92,19 @@ ipcMain.on('goatLogin', async (event: IpcMessageEvent, arg: { username: string; 
     mainWindow!.webContents.send('goatLoginResponse', true);
   } else {
     mainWindow!.webContents.send('goatLoginResponse', false);
+  }
+});
+
+ipcMain.on('stockxLogin', async (event: IpcMessageEvent, arg: { email: string; password: string }) => {
+  // tslint:disable: possible-timing-attack
+  const token: string = await stockx.logIn(arg.email, arg.password);
+  if (token) {
+    data.setSetting('stockxEmail', arg.email);
+    data.setSetting('stockxPassword', arg.password);
+    data.setSetting('stockxJwtToken', token);
+    mainWindow!.webContents.send('stockxLoginResponse', true);
+  } else {
+    mainWindow!.webContents.send('stockxLoginResponse', false);
   }
 });
 

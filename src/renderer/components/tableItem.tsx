@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Select from 'react-select';
 import { ipcRenderer } from 'electron';
+import { SaleInfo } from '@/common/types';
 
 type Action = { label: string; value: string };
 type TableItemProps = {
