@@ -20,7 +20,9 @@ data.loadMemory();
 
 const {
   goatUsername,
-  goatPassword
+  goatPassword,
+  stockxEmail,
+  stockxPassword
 } = data.getSettings();
 if (goatUsername && goatPassword) {
   // tslint:disable-next-line: no-floating-promises
@@ -30,6 +32,19 @@ if (goatUsername && goatPassword) {
       data.setSetting('goatUsername', goatUsername);
       data.setSetting('goatPassword', goatPassword);
       data.setSetting('goatAuthToken', token);
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+}
+if (stockxEmail && stockxPassword) {
+  // tslint:disable-next-line: no-floating-promises
+  (async (): Promise<void> => {
+    try {
+      const token: string = await stockx.logIn(stockxEmail, stockxPassword);
+      data.setSetting('stockxEmail', stockxEmail);
+      data.setSetting('stockxPassword', stockxPassword);
+      data.setSetting('stockxJwtToken', token);
     } catch (e) {
       console.error(e);
     }
@@ -110,6 +125,11 @@ ipcMain.on('stockxLogin', async (event: IpcMessageEvent, arg: { email: string; p
 
 ipcMain.on('syncGoatSales', async (event: IpcMessageEvent) => {
   await goat.getSales();
+  mainWindow!.webContents.send('getSales', data.getSales());
+});
+
+ipcMain.on('syncStockxSales', async (event: IpcMessageEvent) => {
+  await stockx.getSales();
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
