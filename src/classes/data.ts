@@ -48,7 +48,7 @@ export const data: DataManager = {
    */
   createSale: async (sale: SaleInfo | SaleInfo[]): Promise<void> => {
     if (Array.isArray(sale)) {
-      saleStorage.concat(sale);
+      saleStorage = saleStorage.concat(sale);
     } else {
       saleStorage.push(sale);
     }
@@ -70,6 +70,11 @@ export const data: DataManager = {
    */
   getSales: (): SaleInfo[] => {
     return saleStorage;
+  },
+
+  clearGoatSales: (): void => {
+    saleStorage = saleStorage.filter((s: SaleInfo) => !s.goatSale);
+    fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
   },
 
   setSetting: (key: keyof Settings, value: string): void => {

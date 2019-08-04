@@ -11,6 +11,8 @@ export type SaleInfo = {
   sellPrice: number;
   netProfit: number;
   grossProfit: number;
+  goatSale?: boolean;
+  stockxSale?: boolean;
 };
 
 export type Settings = {
@@ -22,9 +24,10 @@ export type Settings = {
 export type DataManager = {
   loadMemory(): void;
   updateMemory(): void;
-  createSale(sale: SaleInfo): Promise<void>;
+  createSale(sale: SaleInfo | SaleInfo[]): Promise<void>;
   deleteSale(index: number): Promise<void>;
   getSales(): SaleInfo[];
+  clearGoatSales(): void;
   setSetting(key: string, value: string): void;
   getSettings(): Settings;
 };

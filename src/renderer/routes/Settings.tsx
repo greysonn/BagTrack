@@ -49,7 +49,7 @@ export class Settings extends React.Component<SettingProps, SettingState> {
   }
 
   public componentWillUnmount(): void {
-    ipcRenderer.removeAllListeners('loadSettings')
+    ipcRenderer.removeAllListeners('loadSettings');
   }
 
   public render(): React.ReactNode {

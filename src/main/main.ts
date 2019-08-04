@@ -16,6 +16,24 @@ let mainWindow: Electron.BrowserWindow | null;
 
 data.loadMemory();
 
+const {
+  goatUsername,
+  goatPassword
+} = data.getSettings();
+if (goatUsername && goatPassword) {
+  // tslint:disable-next-line: no-floating-promises
+  (async (): Promise<void> => {
+    try {
+      const token: string = await goat.logIn(goatUsername, goatPassword);
+      data.setSetting('goatUsername', goatUsername);
+      data.setSetting('goatPassword', goatPassword);
+      data.setSetting('goatAuthToken', token);
+    } catch (e) {
+      console.error(e);
+    }
+  })();
+}
+
 function createWindow(): void {
   mainWindow = new BrowserWindow({
     height: 950,
@@ -73,6 +91,11 @@ ipcMain.on('goatLogin', async (event: IpcMessageEvent, arg: { username: string; 
   } else {
     mainWindow!.webContents.send('goatLoginResponse', false);
   }
+});
+
+ipcMain.on('syncGoatSales', async (event: IpcMessageEvent) => {
+  await goat.getSales();
+  mainWindow!.webContents.send('getSales', data.getSales());
 });
 
 ipcMain.on('createSale', async (event: IpcMessageEvent, arg: { sale: SaleInfo }) => {

@@ -77,6 +77,7 @@ export class TableItem extends React.Component<TableItemProps, TableItemState> {
           <td>
             <div className='cell'>
               <Select
+                className='select-container'
                 value={this.state.selectedAction}
                 onChange={this.handleSelectChange}
                 options={[

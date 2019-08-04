@@ -1,9 +1,10 @@
 import { IpcMessageEvent, ipcRenderer  } from 'electron';
-import moment from 'moment';
 import * as React from 'react';
+import ReactFitText from 'react-fittext';
 import Modal from 'react-responsive-modal';
 
-import { SaleInfo } from '@/common/types';
+import { SaleInfo, Settings } from '@/common/types';
+import * as GoatLogo from '@public/img/goat.png';
 import '@public/scss/home.scss';
 import { AddSale } from '../components/addSale';
 import { TableItem } from '../components/tableItem';
@@ -18,6 +19,7 @@ type HomeProps = {};
 type HomeState = {
   sales: SaleInfo[];
   addModalOpen: boolean;
+  goatConnected: boolean;
 };
 
 let storedSales: SaleInfo[] = [];
@@ -40,7 +42,8 @@ export class Home extends React.Component<HomeProps, HomeState> {
     super(props);
     this.state = {
       sales: [],
-      addModalOpen: false
+      addModalOpen: false,
+      goatConnected: false
     };
 
     this.grossProfit = 0;
@@ -50,6 +53,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
     this.openAddModal = this.openAddModal.bind(this);
     this.closeAddModal = this.closeAddModal.bind(this);
+    this.syncGoat = this.syncGoat.bind(this);
 
     ipcRenderer.on('getSales', (event: IpcMessageEvent, sales: SaleInfo[]): void => {
       /* Reset analytics to prepare for new data */
@@ -69,9 +73,11 @@ export class Home extends React.Component<HomeProps, HomeState> {
         frequency[categoryStore[v]] = (frequency[categoryStore[v]] || 0) + 1;
         if (frequency[categoryStore[v]] > max) {
           max = frequency[categoryStore[v]];
+          this.topCategory = categoryStore[v];
           storedAnalytics.topCategory = categoryStore[v];
         }
       }
+
 
       let mostProfitable: number = 0;
       for (const sale of sales) {
@@ -97,6 +103,16 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.topCategory = storedAnalytics.topCategory;
     this.mostProfitableProduct = storedAnalytics.mostProfitableProduct;
     this.setState({ sales: storedSales });
+    ipcRenderer.send('requestSettings');
+    ipcRenderer.on('loadSettings', (event: IpcMessageEvent, settings: Settings) => {
+      if (settings.goatAuthToken) {
+        this.setState({ goatConnected: true });
+      }
+    });
+  }
+
+  public componentWillUnmount(): void {
+    ipcRenderer.removeAllListeners('loadSettings');
   }
 
   public render(): React.ReactNode {
@@ -194,6 +210,13 @@ export class Home extends React.Component<HomeProps, HomeState> {
               <div className='total'>
                 {this.state.sales.length} {this.state.sales.length === 1 ? 'Sale' : 'Sales'}
               </div>
+              <div className='sync-container'>
+                {this.state.goatConnected ? (
+                  <button onClick={this.syncGoat} className='goat-btn'>
+                    Pull Sales <img className='img' src={GoatLogo.toString()}/>
+                  </button>
+                ) : null }
+              </div>
             </div>
             <table className='sales-table'>
               <thead className='table-head'>
@@ -267,5 +290,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
   private closeAddModal(): void {
     this.setState({ addModalOpen: false });
+  }
+
+  private syncGoat(): void {
+    ipcRenderer.send('syncGoatSales');
   }
 }
