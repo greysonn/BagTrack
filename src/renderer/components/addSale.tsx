@@ -7,6 +7,10 @@ import '@public/scss/addSale.scss';
 import { ipcRenderer } from 'electron';
 import { Theme } from 'react-select/src/types';
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import * as moment from 'moment';
+
 type SelectOption = { 
   value: 'Nike' | 'Adidas' | 'Jordan' | 'Bape' | 'Supreme' | 'Palace' | 'Yeezy' | 'Off-White Nike' | 'Converse' | 'Kith' | 'Digital Goods' | 'Other';
   label: 'Nike' | 'Adidas' | 'Jordan' | 'Bape' | 'Supreme' | 'Palace' | 'Yeezy' | 'Off-White Nike' | 'Converse' | 'Kith' | 'Digital Goods' | 'Other';
@@ -18,7 +22,7 @@ type AddSaleState = {
   productName: string;
   size: string;
   category: SelectOption;
-  purchaseDate: string;
+  purchaseDate: Date;
   purchasePrice: string;
   sellPrice: string;
   fees: string;
@@ -35,7 +39,7 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
       productName: '',
       size: '',
       category: { label: 'Nike', value: 'Nike' },
-      purchaseDate: '',
+      purchaseDate: new Date(),
       purchasePrice: '',
       sellPrice: '',
       fees: ''
@@ -92,6 +96,7 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
       }
     ];
 
+    this.handleDateChange = this.handleDateChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
     this.addProduct = this.addProduct.bind(this);
@@ -146,8 +151,12 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
         <div className='row'>
           <div className='col'>
             <p className='label'>Purchase Date</p>
-            <input className='input' value={this.state.purchaseDate} name='purchaseDate'
-              onChange={this.handleChange} placeholder='17 Jun 2019' />
+              <DatePicker
+                name='purchaseDate'
+                className='input'
+                selected={this.state.purchaseDate}
+                onChange={this.handleDateChange}
+              />
           </div>
           <div className='col'>
             <p className='label'>Purchase Price</p>
@@ -186,7 +195,7 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
       product: state.productName,
       category: state.category.value,
       size: state.size,
-      purchaseDate: state.purchaseDate,
+      purchaseDate: moment(state.purchaseDate).format('D MMM YYYY'),
       purchasePrice: parseInt(state.purchasePrice),
       sellPrice: parseInt(state.sellPrice),
       netProfit: parseInt(state.sellPrice) - parseInt(state.purchasePrice) - parseInt(state.fees),
@@ -198,6 +207,10 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
   private handleChange(event: any): void {
     const newState: Pick<AddSaleState, keyof AddSaleState> = { [event.target.name]: event.target.value } as Pick<AddSaleState, keyof AddSaleState>;
     this.setState(newState);
+  }
+
+  private handleDateChange(date: any) {
+    this.setState({purchaseDate:date});
   }
 
   private handleSelectChange(selectedOption: SelectOption): void {

@@ -28,10 +28,12 @@
   "license": "MIT",
   "dependencies": {
     "@types/moment": "^2.13.0",
+    "@types/react-datepicker": "^2.8.1",
     "@types/react-dom": "^16.8.5",
     "bootstrap": "^4.3.1",
     "moment": "^2.24.0",
     "react": "^16.8.6",
+    "react-datepicker": "^2.8.0",
     "react-dom": "^16.8.6",
     "react-responsive-modal": "^4.0.1",
     "react-router": "^5.0.1",
