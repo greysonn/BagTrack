@@ -5,7 +5,7 @@ import * as GoatLogo from '@public/img/goat.png';
 import * as StockxLogo from '@public/img/stockx.png';
 import CyberLogo from '@public/img/cyber.svg';
 import '@public/scss/settings.scss';
-import { IpcMessageEvent, ipcRenderer } from 'electron';
+import { IpcRendererEvent, ipcRenderer } from 'electron';
 
 type SettingProps = {};
 type SettingState = {
@@ -16,7 +16,7 @@ type SettingState = {
   cyberCookie: string;
 };
 
-ipcRenderer.on('goatLoginResponse', (event: IpcMessageEvent, success: boolean) => {
+ipcRenderer.on('goatLoginResponse', (event: IpcRendererEvent, success: boolean) => {
   if (success) {
     toast.success('Successfully logged into goat and saved credentials.');
   } else {
@@ -24,7 +24,7 @@ ipcRenderer.on('goatLoginResponse', (event: IpcMessageEvent, success: boolean) =
   }
 });
 
-ipcRenderer.on('stockxLoginResponse', (event: IpcMessageEvent, success: boolean) => {
+ipcRenderer.on('stockxLoginResponse', (event: IpcRendererEvent, success: boolean) => {
   if (success) {
     toast.success('Successfully logged into stockx and saved credentials.');
   } else {
@@ -55,7 +55,7 @@ export class Settings extends React.Component<SettingProps, SettingState> {
   public componentDidMount(): void {
     ipcRenderer.send('requestSettings');
 
-    ipcRenderer.on('loadSettings', (event: IpcMessageEvent, settings: SettingState) => {
+    ipcRenderer.on('loadSettings', (event: IpcRendererEvent, settings: SettingState) => {
       this.setState(settings);
     });
   }
