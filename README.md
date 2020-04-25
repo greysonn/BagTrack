@@ -15,7 +15,8 @@ BagTrack allows you to add all of your sales and immediately see your profit/los
 [Node.js (LTS Version)](http://nodejs.org/).
 [Typescript](https://www.typescriptlang.org/#download-links).
 
-For now, you can only run in the development typescript environment until production is ready. At that point, binaries can be found [here](https://github.com/greysonn/BagTrack/releases).
+Binaries can be found [here](https://github.com/greysonn/BagTrack/releases).
+If you wanna run locally follow the guide below
 
 Setup:
 
