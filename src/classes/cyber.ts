@@ -8,6 +8,28 @@ import { data } from './data';
  * Cyber account manager
  */
 export class Cyber {
+  public async testCookie(cookie: string): Promise<boolean> {
+    try {
+      const res = await request({
+        method: 'GET',
+        url: 'https://cybersole.io/api/checkouts',
+        headers: {
+          cookie: `dashboard_session=${cookie};`
+        },
+        qs: {
+          amount: 10
+        },
+        json: true,
+        resolveWithFullResponse: true
+      });
+
+      return res.statusCode === 200;
+    } catch (e) {
+      console.log(e.message);
+      return false;
+    }
+  }
+
   public async getSales(cookie: string): Promise<boolean> {
     data.clearCyberSales();
     try {
