@@ -191,7 +191,7 @@ ipcMain.on('stockxLogin', async (event: IpcMainEvent, arg: { email: string; pass
 });
 
 ipcMain.on('cyberLogin', async (event: IpcMainEvent, arg: { cookie: string }) => {
-  let res = await cyber.getSales(arg.cookie);
+  let res = await cyber.testCookie(arg.cookie);
   if (res) {
     data.setSetting('cyberCookie', arg.cookie);
     mainWindow!.webContents.send('cyberLoginResponse', true);

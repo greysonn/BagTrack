@@ -32,6 +32,14 @@ ipcRenderer.on('stockxLoginResponse', (event: IpcRendererEvent, success: boolean
   }
 });
 
+ipcRenderer.on('cyberLoginResponse', (event: IpcRendererEvent, success: boolean) => {
+  if (success) {
+    toast.success('Successfully logged into Cyber and saved credentials.');
+  } else {
+    toast.error('There was an issue logging into cyber, please try again later');
+  }
+});
+
 /**
  * Home component to be used as main homepage
  */
