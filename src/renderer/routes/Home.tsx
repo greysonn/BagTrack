@@ -1,4 +1,4 @@
-import { IpcMessageEvent, ipcRenderer  } from 'electron';
+import { ipcRenderer, IpcRendererEvent  } from 'electron';
 import * as React from 'react';
 import Modal from 'react-responsive-modal';
 
@@ -72,7 +72,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.openEditModal = this.openEditModal.bind(this)
     this.closeEditModal = this.closeEditModal.bind(this)
 
-    ipcRenderer.on('getSales', (event: IpcMessageEvent, sales: SaleInfo[]): void => {
+    ipcRenderer.on('getSales', (event: IpcRendererEvent, sales: SaleInfo[]): void => {
       /* Reset analytics to prepare for new data */
       this.grossProfit = 0;
       this.netProfit = 0;
@@ -120,7 +120,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.mostProfitableProduct = storedAnalytics.mostProfitableProduct;
     this.setState({ sales: storedSales });
     ipcRenderer.send('requestSettings');
-    ipcRenderer.on('loadSettings', (event: IpcMessageEvent, settings: Settings) => {
+    ipcRenderer.on('loadSettings', (event: IpcRendererEvent, settings: Settings) => {
       if (settings.goatAuthToken) {
         this.setState({ goatConnected: true });
       }

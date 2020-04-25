@@ -1,7 +1,7 @@
 /**
  * Entry point of the Electron app.
  */
-import { app, BrowserWindow, Event, ipcMain, IpcMessageEvent } from 'electron';
+import { app, BrowserWindow, Menu, ipcMain, IpcMainEvent } from 'electron';
 import * as os from 'os';
 import * as path from 'path';
 import * as url from 'url';
@@ -55,13 +55,77 @@ if (stockxEmail && stockxPassword) {
 }
 
 function createWindow(): void {
+  const template: Electron.MenuItemConstructorOptions[] = [
+    {
+      label: "Application",
+      submenu: [
+        {
+          label: "About Application",
+          selector: "orderFrontStandardAboutPanel:"
+        },
+        {
+          type: "separator"
+        },
+        {
+          label: "Quit",
+          accelerator: "Command+Q",
+          click: () => {
+            app.quit()
+          }
+        }
+      ]
+    },
+    {
+      label: "Edit",
+      submenu: [
+        {
+          label: "Undo",
+          accelerator: "CmdOrCtrl+Z",
+          selector: "undo:"
+        },
+        {
+          label: "Redo",
+          accelerator: "Shift+CmdOrCtrl+Z",
+          selector: "redo:"
+        },
+        {
+          type: "separator"
+        },
+        {
+          label: "Cut",
+          accelerator: "CmdOrCtrl+X",
+          selector: "cut:"
+        },
+        {
+          label: "Copy",
+          accelerator: "CmdOrCtrl+C",
+          selector: "copy:"
+        },
+        {
+          label: "Paste",
+          accelerator: "CmdOrCtrl+V",
+          selector: "paste:"
+        },
+        {
+          label: "Select All",
+          accelerator: "CmdOrCtrl+A",
+          selector: "selectAll:"
+        }
+      ]
+    }
+  ] as any;
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate(template)
+  );
+
   mainWindow = new BrowserWindow({
     height: 950,
     width: 1400,
     title: 'BagTrack',
     titleBarStyle: 'hiddenInset',
     webPreferences: {
-      webSecurity: true
+      webSecurity: true,
+      nodeIntegration: true
     }
   });
 
@@ -100,7 +164,7 @@ ipcMain.on('requestSettings', async () => {
   mainWindow!.webContents.send('loadSettings', settings);
 });
 
-ipcMain.on('goatLogin', async (event: IpcMessageEvent, arg: { username: string; password: string }) => {
+ipcMain.on('goatLogin', async (event: IpcMainEvent, arg: { username: string; password: string }) => {
   // tslint:disable: possible-timing-attack
   const token: string = await goat.logIn(arg.username, arg.password);
   if (token) {
@@ -113,7 +177,7 @@ ipcMain.on('goatLogin', async (event: IpcMessageEvent, arg: { username: string; 
   }
 });
 
-ipcMain.on('stockxLogin', async (event: IpcMessageEvent, arg: { email: string; password: string }) => {
+ipcMain.on('stockxLogin', async (event: IpcMainEvent, arg: { email: string; password: string }) => {
   // tslint:disable: possible-timing-attack
   const token: string = await stockx.logIn(arg.email, arg.password);
   if (token) {
@@ -126,7 +190,7 @@ ipcMain.on('stockxLogin', async (event: IpcMessageEvent, arg: { email: string; p
   }
 });
 
-ipcMain.on('cyberLogin', async (event: IpcMessageEvent, arg: { cookie: string }) => {
+ipcMain.on('cyberLogin', async (event: IpcMainEvent, arg: { cookie: string }) => {
   let res = await cyber.getSales(arg.cookie);
   if (res) {
     data.setSetting('cyberCookie', arg.cookie);
@@ -136,32 +200,32 @@ ipcMain.on('cyberLogin', async (event: IpcMessageEvent, arg: { cookie: string })
   }
 });
 
-ipcMain.on('syncGoatSales', async (event: IpcMessageEvent) => {
+ipcMain.on('syncGoatSales', async (event: IpcMainEvent) => {
   await goat.getSales();
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
-ipcMain.on('syncStockxSales', async (event: IpcMessageEvent) => {
+ipcMain.on('syncStockxSales', async (event: IpcMainEvent) => {
   await stockx.getSales();
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
-ipcMain.on('syncCyberSales', async (event: IpcMessageEvent) => {
+ipcMain.on('syncCyberSales', async (event: IpcMainEvent) => {
   await cyber.getSales(data.getSettings().cyberCookie);
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
-ipcMain.on('createSale', async (event: IpcMessageEvent, arg: { sale: SaleInfo }) => {
+ipcMain.on('createSale', async (event: IpcMainEvent, arg: { sale: SaleInfo }) => {
   await data.createSale(arg.sale);
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
-ipcMain.on('editSale', async (event: IpcMessageEvent, arg: { sale: SaleInfo, index: number }) => {
+ipcMain.on('editSale', async (event: IpcMainEvent, arg: { sale: SaleInfo, index: number }) => {
   data.editSale(arg.index, arg.sale);
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
-ipcMain.on('deleteSale', async (event: IpcMessageEvent, index: number) => {
+ipcMain.on('deleteSale', async (event: IpcMainEvent, index: number) => {
   await data.deleteSale(index);
   mainWindow!.webContents.send('getSales', data.getSales());
 });
