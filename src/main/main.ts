@@ -10,9 +10,11 @@ import { data } from '@/classes/data';
 import { SaleInfo, Settings } from '@/common/types';
 import { Goat } from '../classes/goat';
 import { Stockx } from '../classes/stockx';
+import { Cyber } from '@/classes/cyber';
 
 const goat: Goat = new Goat();
 const stockx: Stockx = new Stockx();
+const cyber: Cyber = new Cyber();
 const devtools: boolean = false;
 let mainWindow: Electron.BrowserWindow | null;
 
@@ -22,7 +24,8 @@ const {
   goatUsername,
   goatPassword,
   stockxEmail,
-  stockxPassword
+  stockxPassword,
+  cyberCookie
 } = data.getSettings();
 if (goatUsername && goatPassword) {
   // tslint:disable-next-line: no-floating-promises
@@ -123,6 +126,16 @@ ipcMain.on('stockxLogin', async (event: IpcMessageEvent, arg: { email: string; p
   }
 });
 
+ipcMain.on('cyberLogin', async (event: IpcMessageEvent, arg: { cookie: string }) => {
+  let res = await cyber.getSales(arg.cookie);
+  if (res) {
+    data.setSetting('cyberCookie', arg.cookie);
+    mainWindow!.webContents.send('cyberLoginResponse', true);
+  } else {
+    mainWindow!.webContents.send('cyberLoginResponse', false);
+  }
+});
+
 ipcMain.on('syncGoatSales', async (event: IpcMessageEvent) => {
   await goat.getSales();
   mainWindow!.webContents.send('getSales', data.getSales());
@@ -130,6 +143,11 @@ ipcMain.on('syncGoatSales', async (event: IpcMessageEvent) => {
 
 ipcMain.on('syncStockxSales', async (event: IpcMessageEvent) => {
   await stockx.getSales();
+  mainWindow!.webContents.send('getSales', data.getSales());
+});
+
+ipcMain.on('syncCyberSales', async (event: IpcMessageEvent) => {
+  await cyber.getSales(data.getSettings().cyberCookie);
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 

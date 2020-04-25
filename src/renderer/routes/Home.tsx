@@ -3,6 +3,7 @@ import * as React from 'react';
 import Modal from 'react-responsive-modal';
 
 import { SaleInfo, Settings } from '@/common/types';
+import CyberLogo from '@public/img/cyber.svg';
 import * as GoatLogo from '@public/img/goat.png';
 import * as StockxLogo from '@public/img/stockx.png';
 import '@public/scss/home.scss';
@@ -21,6 +22,7 @@ type HomeState = {
   addModalOpen: boolean;
   goatConnected: boolean;
   stockxConnected: boolean;
+  cyberConnected: boolean;
 };
 
 let storedSales: SaleInfo[] = [];
@@ -45,7 +47,8 @@ export class Home extends React.Component<HomeProps, HomeState> {
       sales: [],
       addModalOpen: false,
       goatConnected: false,
-      stockxConnected: false
+      stockxConnected: false,
+      cyberConnected: false,
     };
 
     this.grossProfit = 0;
@@ -57,6 +60,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.closeAddModal = this.closeAddModal.bind(this);
     this.syncGoat = this.syncGoat.bind(this);
     this.syncStockx = this.syncStockx.bind(this);
+    this.syncCyber = this.syncCyber.bind(this);
 
     ipcRenderer.on('getSales', (event: IpcMessageEvent, sales: SaleInfo[]): void => {
       /* Reset analytics to prepare for new data */
@@ -112,6 +116,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
       }
       if (settings.stockxJwtToken) {
         this.setState({ stockxConnected: true });
+      }
+      if (settings.cyberCookie) {
+        this.setState({ cyberConnected: true });
       }
     });
   }
@@ -226,6 +233,11 @@ export class Home extends React.Component<HomeProps, HomeState> {
                     Pull Sales <img className='img' src={GoatLogo.toString()}/>
                   </button>
                 ) : null }
+                {this.state.cyberConnected ? (
+                  <button onClick={this.syncCyber} className='cyber-btn'>
+                    Pull Sales <CyberLogo className='img' />
+                  </button>
+                ) : null }
               </div>
             </div>
             <table className='sales-table'>
@@ -308,5 +320,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
   private syncStockx(): void {
     ipcRenderer.send('syncStockxSales');
+  }
+
+  private syncCyber(): void {
+    ipcRenderer.send('syncCyberSales');
   }
 }
