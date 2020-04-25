@@ -1,7 +1,7 @@
 /**
  * Entry point of the Electron app.
  */
-import { app, BrowserWindow, Event, ipcMain, IpcMessageEvent } from 'electron';
+import { app, BrowserWindow, Event, Menu, ipcMain, IpcMessageEvent } from 'electron';
 import * as os from 'os';
 import * as path from 'path';
 import * as url from 'url';
@@ -55,6 +55,48 @@ if (stockxEmail && stockxPassword) {
 }
 
 function createWindow(): void {
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate([
+      {
+        label: "Application",
+        submenu: [
+          {
+            label: "About Application",
+            selector: "orderFrontStandardAboutPanel:",
+          },
+          { type: "separator" },
+          {
+            label: "Quit",
+            accelerator: "Command+Q",
+            click: function () {
+              app.quit();
+            },
+          },
+        ],
+      },
+      {
+        label: "Edit",
+        submenu: [
+          { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+          {
+            label: "Redo",
+            accelerator: "Shift+CmdOrCtrl+Z",
+            selector: "redo:",
+          },
+          { type: "separator" },
+          { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+          { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+          { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+          {
+            label: "Select All",
+            accelerator: "CmdOrCtrl+A",
+            selector: "selectAll:",
+          },
+        ],
+      },
+    ])
+  );
+
   mainWindow = new BrowserWindow({
     height: 950,
     width: 1400,
