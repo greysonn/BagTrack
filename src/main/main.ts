@@ -156,6 +156,11 @@ ipcMain.on('createSale', async (event: IpcMessageEvent, arg: { sale: SaleInfo })
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 
+ipcMain.on('editSale', async (event: IpcMessageEvent, arg: { sale: SaleInfo, index: number }) => {
+  data.editSale(arg.index, arg.sale);
+  mainWindow!.webContents.send('getSales', data.getSales());
+});
+
 ipcMain.on('deleteSale', async (event: IpcMessageEvent, index: number) => {
   await data.deleteSale(index);
   mainWindow!.webContents.send('getSales', data.getSales());

@@ -61,6 +61,15 @@ export const data: DataManager = {
   },
 
   /**
+   * editSale
+   * edits the sale stored at position index
+   */
+  editSale: (index: number, sale: SaleInfo): void => {
+    saleStorage[index] = sale;
+    fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
+  },
+
+  /**
    * deleteSale
    * removes a sale from the sales.json path
    */
