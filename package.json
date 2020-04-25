@@ -1,6 +1,6 @@
 {
   "name": "bagtrack",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Application built to help resellers track their profits and losses",
   "main": "./dist/main.bundle.js",
   "scripts": {
