@@ -13,6 +13,7 @@ export type SaleInfo = {
   grossProfit: number;
   goatSale?: boolean;
   stockxSale?: boolean;
+  cyberCheckout?: boolean;
 };
 
 export type Settings = {
@@ -23,16 +24,19 @@ export type Settings = {
   stockxPassword: string;
   stockxJwtToken: string;
   stockxUserId: string;
+  cyberCookie: string;
 };
 
 export type DataManager = {
   loadMemory(): void;
   updateMemory(): void;
   createSale(sale: SaleInfo | SaleInfo[]): Promise<void>;
+  editSale(index: number, sale: SaleInfo): void;
   deleteSale(index: number): Promise<void>;
   getSales(): SaleInfo[];
   clearGoatSales(): void;
   clearStockxSales(): void;
+  clearCyberSales(): void;
   setSetting(key: string, value: string): void;
   getSettings(): Settings;
 };

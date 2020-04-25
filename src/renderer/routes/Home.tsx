@@ -3,11 +3,14 @@ import * as React from 'react';
 import Modal from 'react-responsive-modal';
 
 import { SaleInfo, Settings } from '@/common/types';
+import CyberLogo from '@public/img/cyber.svg';
 import * as GoatLogo from '@public/img/goat.png';
 import * as StockxLogo from '@public/img/stockx.png';
 import '@public/scss/home.scss';
 import { AddSale } from '../components/addSale';
+import { EditSale } from '../components/editSale';
 import { TableItem } from '../components/tableItem';
+import { data } from '@/classes/data';
 
 type AnalyticStore = {
   grossProfit: number;
@@ -19,8 +22,12 @@ type HomeProps = {};
 type HomeState = {
   sales: SaleInfo[];
   addModalOpen: boolean;
+  editSale: SaleInfo;
+  editModalOpen: boolean;
+  editSaleIndex: number;
   goatConnected: boolean;
   stockxConnected: boolean;
+  cyberConnected: boolean;
 };
 
 let storedSales: SaleInfo[] = [];
@@ -44,8 +51,12 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.state = {
       sales: [],
       addModalOpen: false,
+      editSale: {} as SaleInfo,
+      editModalOpen: false,
+      editSaleIndex: -1,
       goatConnected: false,
-      stockxConnected: false
+      stockxConnected: false,
+      cyberConnected: false,
     };
 
     this.grossProfit = 0;
@@ -57,6 +68,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
     this.closeAddModal = this.closeAddModal.bind(this);
     this.syncGoat = this.syncGoat.bind(this);
     this.syncStockx = this.syncStockx.bind(this);
+    this.syncCyber = this.syncCyber.bind(this);
+    this.openEditModal = this.openEditModal.bind(this)
+    this.closeEditModal = this.closeEditModal.bind(this)
 
     ipcRenderer.on('getSales', (event: IpcMessageEvent, sales: SaleInfo[]): void => {
       /* Reset analytics to prepare for new data */
@@ -113,6 +127,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
       if (settings.stockxJwtToken) {
         this.setState({ stockxConnected: true });
       }
+      if (settings.cyberCookie) {
+        this.setState({ cyberConnected: true });
+      }
     });
   }
 
@@ -129,7 +146,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
         <tbody className='table-body'>
           { sales.map((sale: SaleInfo, index: number) => {
             return (
-              <TableItem sale={sale} key={index} index={index} />
+              <TableItem sale={sale} key={index} index={index} openEditModal={this.openEditModal.bind(this)} />
             );
           })}
         </tbody>
@@ -226,6 +243,11 @@ export class Home extends React.Component<HomeProps, HomeState> {
                     Pull Sales <img className='img' src={GoatLogo.toString()}/>
                   </button>
                 ) : null }
+                {this.state.cyberConnected ? (
+                  <button onClick={this.syncCyber} className='cyber-btn'>
+                    Pull Sales <CyberLogo className='img' />
+                  </button>
+                ) : null }
               </div>
             </div>
             <table className='sales-table'>
@@ -290,8 +312,29 @@ export class Home extends React.Component<HomeProps, HomeState> {
         >
           <AddSale closeModal={this.closeAddModal} />
         </Modal>
+
+        <Modal
+          open={this.state.editModalOpen}
+          onClose={this.closeEditModal}
+          focusTrapped={false}
+          showCloseIcon={false}
+          center
+          classNames={{
+            modal: 'configure-modal'
+          }}
+        >
+          <EditSale sale={this.state.editSale} index={this.state.editSaleIndex} closeModal={this.closeEditModal} />
+        </Modal>
       </div>
     );
+  }
+
+  private openEditModal(editSaleIndex: number, editSale: SaleInfo): void {
+    this.setState({ editModalOpen: true, editSaleIndex, editSale });
+  }
+
+  private closeEditModal(): void {
+    this.setState({ editModalOpen: false });
   }
 
   private openAddModal(): void {
@@ -308,5 +351,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
 
   private syncStockx(): void {
     ipcRenderer.send('syncStockxSales');
+  }
+
+  private syncCyber(): void {
+    ipcRenderer.send('syncCyberSales');
   }
 }

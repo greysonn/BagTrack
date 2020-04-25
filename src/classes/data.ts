@@ -30,6 +30,7 @@ export const data: DataManager = {
         stockxPassword: '',
         stockxJwtToken: '',
         stockxUserId: '',
+        cyberCookie: '',
       }));
     }
     saleStorage = JSON.parse(fs.readFileSync(salesPath).toString());
@@ -60,6 +61,15 @@ export const data: DataManager = {
   },
 
   /**
+   * editSale
+   * edits the sale stored at position index
+   */
+  editSale: (index: number, sale: SaleInfo): void => {
+    saleStorage[index] = sale;
+    fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
+  },
+
+  /**
    * deleteSale
    * removes a sale from the sales.json path
    */
@@ -83,6 +93,11 @@ export const data: DataManager = {
 
   clearStockxSales: (): void => {
     saleStorage = saleStorage.filter((s: SaleInfo) => !s.stockxSale);
+    fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
+  },
+
+  clearCyberSales: (): void => {
+    saleStorage = saleStorage.filter((s: SaleInfo) => !s.cyberCheckout);
     fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
   },
 

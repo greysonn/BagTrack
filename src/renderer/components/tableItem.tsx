@@ -7,6 +7,7 @@ type Action = { label: string; value: string };
 type TableItemProps = {
   index: number;
   sale: SaleInfo;
+  openEditModal: (index: number, sale: SaleInfo) => void;
 };
 type TableItemState = {
   selectedAction: {
@@ -30,6 +31,8 @@ export class TableItem extends React.Component<TableItemProps, TableItemState> {
     this.handleSelectChange = (selectedAction: Action): void => {
       if (selectedAction.value === 'delete') {
         ipcRenderer.send('deleteSale', this.props.index);
+      } else if (selectedAction.value === 'edit') {
+        this.props.openEditModal(props.index, props.sale);
       }
     };
   }
@@ -84,6 +87,9 @@ export class TableItem extends React.Component<TableItemProps, TableItemState> {
                 options={[
                   {
                     value: 'title', label: 'Actions'
+                  },
+                  {
+                    value: 'edit', label: 'Edit'
                   },
                   {
                     value: 'delete', label: 'Delete'

@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 
 import * as GoatLogo from '@public/img/goat.png';
 import * as StockxLogo from '@public/img/stockx.png';
+import CyberLogo from '@public/img/cyber.svg';
 import '@public/scss/settings.scss';
 import { IpcMessageEvent, ipcRenderer } from 'electron';
 
@@ -12,6 +13,7 @@ type SettingState = {
   stockxPassword: string;
   goatUsername: string;
   goatPassword: string;
+  cyberCookie: string;
 };
 
 ipcRenderer.on('goatLoginResponse', (event: IpcMessageEvent, success: boolean) => {
@@ -40,12 +42,14 @@ export class Settings extends React.Component<SettingProps, SettingState> {
       stockxEmail: '',
       stockxPassword: '',
       goatUsername: '',
-      goatPassword: ''
+      goatPassword: '',
+      cyberCookie: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.stockxLogin = this.stockxLogin.bind(this);
     this.goatLogin = this.goatLogin.bind(this);
+    this.cyberLogin = this.cyberLogin.bind(this);
   }
 
   public componentDidMount(): void {
@@ -115,6 +119,25 @@ export class Settings extends React.Component<SettingProps, SettingState> {
                 </div>
               </div>
             </div>
+            <div className="row" style={{ marginTop: '10px' }}>
+              <div className='col'>
+                <div className='row'>
+                  <div className='col'>
+                    <p>Cyber Dashboard Cookie</p>
+                    <input value={this.state.cyberCookie} className='input' placeholder='dashboard_session cookie'
+                      onChange={this.handleChange} name='cyberCookie' />
+                  </div>
+                </div>
+                <div className='row' style={{ marginTop: '22px', marginBottom: '22px' }}>
+                  <div className='col'>
+                    <button onClick={this.cyberLogin} className='cyber-btn'>Login to <CyberLogo className='img'/></button>
+                  </div>
+                </div>
+              </div>
+              <div className="col">
+                <div className="row"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -139,5 +162,11 @@ export class Settings extends React.Component<SettingProps, SettingState> {
       email: this.state.stockxEmail,
       password: this.state.stockxPassword
     });
+  }
+
+  private cyberLogin(): void {
+    ipcRenderer.send('cyberLogin', {
+      cookie: this.state.cyberCookie
+    })
   }
 }

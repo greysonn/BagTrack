@@ -8,6 +8,7 @@ html, body {
   overflow-y: hidden;
   font-family: 'Open Sans';
   background: $background;
+  margin: 0;
   // background-image: linear-gradient(to top, #2d2e2e, #1b1c1d);
   -webkit-app-region: no-drag;
   .drag-region {

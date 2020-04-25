@@ -110,6 +110,28 @@
       }
     }
 
+    .cyber-btn {
+      height: 51px;
+      width: 206px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 14px;
+      padding: 12px 36px;
+      outline: none;
+      background: #14141c;
+      box-shadow: 0px 15px 85px -7px rgba(83, 255, 129, 0.6);
+      .img {
+        margin-left: .7rem;
+        width: 25px;
+        height: auto;
+        max-width: 100%;
+      }
+    }
+
     .save-btn {
       display: flex;
       justify-content: center;

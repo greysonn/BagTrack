@@ -15,10 +15,12 @@ type SelectOption = {
   value: 'Nike' | 'Adidas' | 'Jordan' | 'Bape' | 'Supreme' | 'Palace' | 'Yeezy' | 'Off-White Nike' | 'Converse' | 'Kith' | 'Digital Goods' | 'Other';
   label: 'Nike' | 'Adidas' | 'Jordan' | 'Bape' | 'Supreme' | 'Palace' | 'Yeezy' | 'Off-White Nike' | 'Converse' | 'Kith' | 'Digital Goods' | 'Other';
 };
-type AddSaleProps = {
+type EditSaleProps = {
   closeModal: any;
+  index: number;
+  sale: SaleInfo;
 };
-type AddSaleState = {
+type EditSaleState = {
   productName: string;
   size: string;
   category: SelectOption;
@@ -29,20 +31,20 @@ type AddSaleState = {
 };
 
 /**
- * AddSale component to be used in the modal popup.
+ * EditSale component to be used in the modal popup.
  */
-export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
+export class EditSale extends React.Component<EditSaleProps, EditSaleState> {
   private categoryOptions: SelectOption[];
-  constructor(props: AddSaleProps) {
+  constructor(props: EditSaleProps) {
     super(props);
     this.state = {
-      productName: '',
-      size: '',
-      category: { label: 'Nike', value: 'Nike' },
-      purchaseDate: new Date(),
-      purchasePrice: '',
-      sellPrice: '',
-      fees: ''
+      productName: props.sale.product,
+      size: props.sale.size,
+      category: { label: props.sale.category, value: props.sale.category },
+      purchaseDate: new Date(props.sale.purchaseDate),
+      purchasePrice: props.sale.purchasePrice.toString(),
+      sellPrice: props.sale.sellPrice.toString(),
+      fees: (props.sale.grossProfit - props.sale.netProfit).toString()
     };
 
     this.categoryOptions = [
@@ -99,7 +101,7 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.addProduct = this.addProduct.bind(this);
+    this.editSale = this.editSale.bind(this);
   }
 
   public render(): React.ReactNode {
@@ -174,14 +176,14 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
               onChange={this.handleChange} placeholder='30' />
           </div>
         </div>
-        <button onClick={this.addProduct} className='add-button'>
+        <button onClick={this.editSale} className='add-button'>
           Create
         </button>
       </div>
     );
   }
 
-  private addProduct(event: any): void {
+  private editSale(): void {
     // tslint:disable: no-for-in
     const state: any = this.state;
     for (const value in state) {
@@ -201,11 +203,11 @@ export class AddSale extends React.Component<AddSaleProps, AddSaleState> {
       netProfit: parseInt(state.sellPrice) - parseInt(state.purchasePrice) - parseInt(state.fees),
       grossProfit: parseInt(state.sellPrice) - parseInt(state.purchasePrice)
     };
-    ipcRenderer.send('createSale', { sale });
+    ipcRenderer.send('editSale', { sale, index: this.props.index });
   }
 
   private handleChange(event: any): void {
-    const newState: Pick<AddSaleState, keyof AddSaleState> = { [event.target.name]: event.target.value } as Pick<AddSaleState, keyof AddSaleState>;
+    const newState: Pick<EditSaleState, keyof EditSaleState> = { [event.target.name]: event.target.value } as Pick<EditSaleState, keyof EditSaleState>;
     this.setState(newState);
   }
 
