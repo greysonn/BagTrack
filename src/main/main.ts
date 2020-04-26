@@ -221,7 +221,7 @@ ipcMain.on('createSale', async (event: IpcMainEvent, arg: { sale: SaleInfo }) =>
 });
 
 ipcMain.on('editSale', async (event: IpcMainEvent, arg: { sale: SaleInfo, index: number }) => {
-  data.editSale(arg.index, arg.sale);
+  await data.editSale(arg.index, arg.sale);
   mainWindow!.webContents.send('getSales', data.getSales());
 });
 

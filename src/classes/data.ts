@@ -64,7 +64,7 @@ export const data: DataManager = {
    * editSale
    * edits the sale stored at position index
    */
-  editSale: (index: number, sale: SaleInfo): void => {
+  editSale: async (index: number, sale: SaleInfo): Promise<void> => {
     saleStorage[index] = sale;
     fs.writeFileSync(salesPath, JSON.stringify(saleStorage));
   },

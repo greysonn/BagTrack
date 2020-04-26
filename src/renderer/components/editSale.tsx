@@ -204,6 +204,7 @@ export class EditSale extends React.Component<EditSaleProps, EditSaleState> {
       grossProfit: parseInt(state.sellPrice) - parseInt(state.purchasePrice)
     };
     ipcRenderer.send('editSale', { sale, index: this.props.index });
+    this.props.closeModal();
   }
 
   private handleChange(event: any): void {
