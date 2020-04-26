@@ -28,7 +28,7 @@ ipcRenderer.on('stockxLoginResponse', (event: IpcRendererEvent, success: boolean
   if (success) {
     toast.success('Successfully logged into stockx and saved credentials.');
   } else {
-    toast.error('There was an issue logging into stockx, please try again later');
+    toast.error('There was an issue logging into stockx, try opening stockx.com in browser, solving the captcha, and trying again.');
   }
 });
 
