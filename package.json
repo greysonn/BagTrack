@@ -52,7 +52,7 @@
     "@types/request": "^2.48.2",
     "@types/request-promise": "^4.1.44",
     "acorn": "^6.2.1",
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.3",
     "copy-pkg-json-webpack-plugin": "0.0.38",
     "cross-env": "^5.2.0",
     "css-loader": "^1.0.1",
